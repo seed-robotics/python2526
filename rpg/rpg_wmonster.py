@@ -6,20 +6,10 @@ def showInstructions():
           go [direction] (north, south, east, west, up, down)
           get [item]
           exit - to quit the game
-          
-          MAP:
-          
-     [Garden] ---- [Garden]
-           |                |
-      [Living Room] ---- [Kitchen]
-           |                |
-      [Bedroom] ------- [Office]
-           |
-        [Attic]
-          
           Objective:
           Find the sword to defeat the monster!
           ''')
+    
 
 def showStatus():
     print('---------------------------')
@@ -28,10 +18,23 @@ def showStatus():
         displayName = "Garden"
     print('You are in the ' + displayName)
     print('Inventory:', inventory)
+    
+    # Show the map only if the player has the map item
+    if "map" in inventory:
+        print('''
+          MAP:
+        [Garden] ---- [Garden]
+           |                |
+        [Living Room] ---- [Kitchen]
+           |                |
+        [Bedroom] ------- [Office]
+           |
+        [Attic]
+        ''')
+    
     if "item" in rooms[currentRoom]:
         print('You see a ' + rooms[currentRoom]['item'])
     print('---------------------------')
-
 inventory = []
 
 rooms = {
