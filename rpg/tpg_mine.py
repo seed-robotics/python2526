@@ -6,14 +6,18 @@ def showInstructions():
           go [direction] (north, south, east, west, up, down)
           get [item]
           exit - to quit the game
-          
+          ''')
+def showMap():
+    print('''      
           MAP:
           
-     [Garden] ---- [Garden]
+      [Garden] -----------[Garden]
            |                |
       [Living Room] ---- [Kitchen]
            |                |
       [Bedroom] ------- [Office]
+           |
+          ud
            |
         [Attic]
           ''')
@@ -21,14 +25,17 @@ def showInstructions():
 def showStatus():
     print('---------------------------')
     displayName = currentRoom
-    if currentRoom.startswith("Garden"):
-        displayName = "Garden"
+    # if currentRoom.startswith("Garden"):
+    #     displayName = "Garden"
     print('You are in the ' + displayName)
     print('Inventory:', inventory)
     if "item" in rooms[currentRoom]:
         print('You see a ' + rooms[currentRoom]['item'])
+    else:
+        print("No items here!")
     print('---------------------------')
-
+    if 'map' in inventory:
+        showMap()
 inventory = []
 
 rooms = {
@@ -46,7 +53,7 @@ rooms = {
     },
     'Bedroom': {
         'north': 'Living Room',
-        'west': 'Office',
+        'east': 'Office',
         'up': 'Attic',
         'item': 'map'
     },
@@ -73,47 +80,35 @@ rooms = {
 }
 
 currentRoom = 'Living Room'
-
-showInstructions()
+nextRoom =''
 
 while True:
     showStatus()
-
-    move = ''
-    while move == '':
+    move=''
+    while move=='':
         move = input('> ').lower().split()
 
-    if move[0] == 'go':
-        direction = move[1]
+    if move[0]=='go':
+        direction=move[1]
         if direction in rooms[currentRoom]:
-            nextRoom = rooms[currentRoom][direction]
-            # Έλεγχος κλειδωμένου Office
+            nextRoom=rooms[currentRoom][direction]
             if 'locked' in rooms[nextRoom] and rooms[nextRoom]['locked']:
                 if 'key' in inventory:
-                    print("You use the key to unlock the Office.")
+                    print("you have the key so door unlocked!")
                     rooms[nextRoom]['locked'] = False
                     currentRoom = nextRoom
                 else:
-                    print("The Office is locked! You need a key.")
+                    print("You need the key to get in!")
             else:
                 currentRoom = nextRoom
         else:
             print("You can't go that way!")
-
-    elif move[0] == 'get':
-        item = move[1]
+    elif move[0]=='get':
+        item=move[1]
         if "item" in rooms[currentRoom] and item == rooms[currentRoom]['item']:
-            inventory.append(rooms[currentRoom]['item'])
-            print(f'{item} got!')
+            inventory.append(rooms[currentRoom]["item"])
             del rooms[currentRoom]['item']
         else:
             print(f"Can't get {item}!")
-
-    elif move[0] == 'exit':
-        print("Game exited. Bye!")
-        break
-
-    # Νίκη αν μαζέψεις όλα τα αντικείμενα
-    if len(inventory) == 7:  # Προσθέσαμε treasure στο Attic
-        print("You collected all items! You win!")
-        break
+    else:
+        print("wrong input")
