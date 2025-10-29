@@ -1,119 +1,102 @@
 def showInstructions():
+    #print a main menu and the commands
     print('''
-          Mini RPG
-          =========
+          RPG Game
+          ========
           Commands:
-          go [direction] (north, south, east, west, up, down)
+          go [direction]
           get [item]
-          exit - to quit the game
-          
-          MAP:
-          
-     [Garden] ---- [Garden]
-           |                |
-      [Living Room] ---- [Kitchen]
-           |                |
-      [Bedroom] ------- [Office]
-           |
-        [Attic]
           ''')
 
 def showStatus():
+    #print the player's current status
     print('---------------------------')
-    displayName = currentRoom
-    if currentRoom.startswith("Garden"):
-        displayName = "Garden"
-    print('You are in the ' + displayName)
-    print('Inventory:', inventory)
+    print('You are in the ' + currentRoom)
+    #print the current inventory
+    print('Inventory : ' + str(inventory))
+    #print an item if there is one
     if "item" in rooms[currentRoom]:
         print('You see a ' + rooms[currentRoom]['item'])
-    print('---------------------------')
+    print("---------------------------")
 
+#an inventory, which is initially empty
 inventory = []
 
+#a dictionary linking a room to other rooms
 rooms = {
-    'Living Room': {
-        'north': 'Garden West',
-        'east': 'Kitchen',
-        'south': 'Bedroom',
-        'item': 'key'
+    'Hall' : {
+        'south' : 'Kitchen',
+        'east'  : 'Dining room',
+        'item'  : 'key'
     },
-    'Kitchen': {
-        'north': 'Garden East',
-        'west': 'Living Room',
-        'south': 'Office',
-        'item': 'knife'
+    'Kitchen' : {
+        'north' : 'Hall',
+        'west'  : 'Hall',
+        'item'  : 'monster'
     },
-    'Bedroom': {
-        'north': 'Living Room',
-        'west': 'Office',
-        'up': 'Attic',
-        'item': 'map'
+    'Dining room' : {
+        'west'  : 'Hall',
+        'south'  : 'Garden',
+        'east' : 'playroom',
+        'item' : 'flashlight'
     },
-    'Office': {
-        'north': 'Kitchen',
-        'east': 'Bedroom',
-        'item': 'note',
-        'locked': True
+    'garden' : {
+        'north'  : 'Dining room',
+        'south'  : 'Garden',
+        'west' : 'exit',
+        'item'  : 'potion'
     },
-    'Garden West': {
-        'south': 'Living Room',
-        'east': 'Garden East',
-        'item': 'flower'
+    'playroom' : {
+       'west' : 'Dining Room',
+        'item' : 'monster',
+        'item' : 'potion'
     },
-    'Garden East': {
-        'south': 'Kitchen',
-        'west': 'Garden West',
-        'item': 'shovel'
-    },
-    'Attic': {
-        'down': 'Bedroom',
-        'item': 'treasure'
+    'exit' : {
+        'east' : 'Garden'
     }
 }
 
-currentRoom = 'Living Room'
+#start the player in the Hall
+currentRoom = 'Hall'
 
 showInstructions()
 
+#loop forever
 while True:
+
     showStatus()
 
+    #get the player's next 'move'
+    #.split() breaks it up into an list array
+    #eg typing 'go east' would give the list:
+    #['go','east']
     move = ''
     while move == '':
-        move = input('> ').lower().split()
+        move = input('>')
 
+    move = move.lower().split()
+
+    #if they type 'go' first
     if move[0] == 'go':
-        direction = move[1]
-        if direction in rooms[currentRoom]:
-            nextRoom = rooms[currentRoom][direction]
-            # Έλεγχος κλειδωμένου Office
-            if 'locked' in rooms[nextRoom] and rooms[nextRoom]['locked']:
-                if 'key' in inventory:
-                    print("You use the key to unlock the Office.")
-                    rooms[nextRoom]['locked'] = False
-                    currentRoom = nextRoom
-                else:
-                    print("The Office is locked! You need a key.")
-            else:
-                currentRoom = nextRoom
+        #check that they are allowed wherever they want to go
+        if move[1] in rooms[currentRoom]:
+            #set the current room to the new room
+            currentRoom = rooms[currentRoom][move[1]]
+        #there is no door (link) to the new room
         else:
-            print("You can't go that way!")
+            print('You can\'t go that way!')
 
-    elif move[0] == 'get':
-        item = move[1]
-        if "item" in rooms[currentRoom] and item == rooms[currentRoom]['item']:
-            inventory.append(rooms[currentRoom]['item'])
-            print(f'{item} got!')
+    #if they type 'get' first
+    if move[0] == 'get' :
+        #if the room contains an item, and the item is the one they want to get
+        if "item" in rooms[currentRoom] and move[1] in rooms[currentRoom]['item']:
+            #add the item to their inventory
+            inventory += [move[1]]
+            #display a helpful message
+            print(move[1] + ' got!')
+            #delete the item from the room
             del rooms[currentRoom]['item']
+        #otherwise, if the item isn't there to get
         else:
-            print(f"Can't get {item}!")
-
-    elif move[0] == 'exit':
-        print("Game exited. Bye!")
-        break
-
-    # Νίκη αν μαζέψεις όλα τα αντικείμενα
-    if len(inventory) == 7:  # Προσθέσαμε treasure στο Attic
-        print("You collected all items! You win!")
-        break
+            #tell them they can't get it
+            print('Can\'t get ' + move[1] + '!')
