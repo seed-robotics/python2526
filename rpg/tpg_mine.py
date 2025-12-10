@@ -73,8 +73,7 @@ def draw_room():
 
 
     pygame.display.flip()
-
-
+    
 # --- Game loop ---
 running = True
 while running:

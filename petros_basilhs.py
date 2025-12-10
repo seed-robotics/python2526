@@ -1,5 +1,6 @@
 import pygame
 import sys
+import time
 
 def reset():
     global ball_x
@@ -13,7 +14,8 @@ def reset():
 
 pygame.init()
 clock = pygame.time.Clock()
-WIDTH, HEIGHT = 1920, 1080
+info = pygame.display.Info()
+WIDTH, HEIGHT = info.current_w, info.current_h
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pong")
 BLACK = (0, 0, 0)
@@ -26,7 +28,8 @@ ball_x = WIDTH // 2
 ball_y = HEIGHT // 2
 ball_speed_x = 8
 ball_speed_y = 8
-PADDLE_WIDTH, PADDLE_HEIGHT = 10, 100
+ability_time = 1
+PADDLE_WIDTH, PADDLE_HEIGHT = 25, HEIGHT//5
 paddle_x = 50
 paddle2_x = WIDTH - paddle_x
 paddle_speed = 5
@@ -40,7 +43,7 @@ ball_rect = pygame.Rect(ball_x - BALL_SIZE // 2, ball_y - BALL_SIZE // 2, BALL_S
 
 while running:
     clock.tick(60)
-    if score1 >= 3 or score2 >= 3:
+    if score1 >= 50 or score2 >= 50:
         running = False
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -67,13 +70,16 @@ while running:
 
     if keys[pygame.K_s]:
         paddle_y += paddle_speed
-    
+
+    if keys[pygame.K_e]:
+        ball_speed_x=50
+
     if paddle_y < 0:
         paddle_y = 0
     if paddle_y > HEIGHT + PADDLE_HEIGHT:
         paddle_y = HEIGHT + PADDLE_HEIGHT
 
-    if keys[pygame.K_UP]:
+    if keys[pygame.K_o]:
         paddle2_y -= paddle_speed
     
     if paddle2_y < 0:
@@ -81,7 +87,7 @@ while running:
     if paddle2_y > HEIGHT - PADDLE_HEIGHT:
         paddle2_y = HEIGHT - PADDLE_HEIGHT
 
-    if keys[pygame.K_DOWN]:
+    if keys[pygame.K_l]:
         paddle2_y += paddle_speed
     
     if paddle2_y < 0:
