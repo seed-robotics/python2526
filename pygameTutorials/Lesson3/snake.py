@@ -66,6 +66,8 @@ direction = "RIGHT"
 running = True
 score = 0
 level = 1
+start=1
+blink=0
 food_x = random.randint(0, (WIDTH // CELL) - 1)
 food_y = random.randint(0, (HEIGHT // CELL) - 1)
 snake = [
@@ -75,6 +77,18 @@ snake = [
     [7, 10],
     [6, 10]
 ]
+while start:
+    clock.tick(FPS)
+    screen.fill((0, 0, 0))
+    blink += 1
+    if (blink // 5) % 2 == 0:
+        start_text = font_big.render("Press Space to Start", True, (255, 255, 0))
+        screen.blit(start_text, ((WIDTH - start_text.get_width())//2, HEIGHT//2))
+    pygame.display.flip()
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            start=0
+            break
 
 while running:
     clock.tick(FPS)
