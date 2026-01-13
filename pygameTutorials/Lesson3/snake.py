@@ -59,7 +59,6 @@ def draw_super_food():
             (super_food_x * CELL, super_food_y * CELL, CELL, CELL))
 def spawn_obstacle():
     global obstacle
-
     while True:
         ox = random.randint(0, GRID - 2)
         oy = random.randint(0, GRID - 2)
@@ -83,7 +82,6 @@ pygame.init()
 
 try:
     with open("./highscore.txt", "r") as file:
-        print("inside")
         highscore = int(file.read().strip())
 except:
     highscore = 0
@@ -99,7 +97,7 @@ super_food_active = False
 super_food_x = 0
 super_food_y = 0
 super_food_timer = 0
-SUPER_FOOD_DURATION = 150 
+SUPER_FOOD_DURATION = 150
 grow=0
 
 obstacle = []
@@ -125,6 +123,7 @@ snake = [
     [7, 10],
     [6, 10]
 ]
+
 while start:
     clock.tick(FPS)
     screen.fill((0, 0, 0))
@@ -168,7 +167,6 @@ while running:
     if new_head in snake[1:]:
         handle_game_over()
         continue
-
     if snake_x < 0 or snake_x >= GRID or snake_y < 0 or snake_y >= GRID:
         handle_game_over()
         continue
@@ -179,11 +177,11 @@ while running:
     if super_food_active and snake_x == super_food_x and snake_y == super_food_y:
         score += 3
         super_food_active = False
-        grow=3
+        grow+=3
 
     if (snake_x == food_x and snake_y == food_y):
         score += 1
-        grow = 1
+        grow += 1
         level = score // 5 + 1 
         if level > previous_lvl:
             spawn_obstacle()
