@@ -1,3 +1,4 @@
 ~$*.docx
 *.txt
 *.tmp
+__pycache__/
