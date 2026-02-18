@@ -7,3 +7,5 @@ PADDLE_SPEED = 10
 FPS = 60
 BG_COLOR = (24,135,50)
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+flag = True

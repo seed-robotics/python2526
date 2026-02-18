@@ -1,9 +1,10 @@
 import pygame
 import sys
 import paddle as pd
-from settings import * 
+from settings import *
 import ball as bl
 import brick as br
+import heart as h
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -18,7 +19,12 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+    
 
+    for brick in bricks:
+        if ball.colliderect(brick["rect"]):
+            bricks.remove(brick)
+            speed[1] *= -1
     paddle = pd.move_paddle(paddle,PADDLE_SPEED)
     ball = bl.move_ball(ball, paddle)  
     screen.fill(BG_COLOR)
@@ -29,8 +35,13 @@ while running:
         brick["rect"],
         border_radius=10)
     
-    pygame.draw.rect(screen, WHITE, paddle)
-    pygame.draw.ellipse(screen, WHITE, ball)
+    if ball.y >= HEIGHT:
+        screen.fill(BLACK)
+        flag = False
+    if flag:
+        pygame.draw.rect(screen, WHITE, paddle)
+        pygame.draw.ellipse(screen, WHITE, ball)
+        h.heart_icon(screen)
     pygame.display.flip()
 
 pygame.quit()
