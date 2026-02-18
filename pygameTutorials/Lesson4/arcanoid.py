@@ -1,77 +1,123 @@
 import pygame
 import sys
-
-WIDTH, HEIGHT = 800, 600
-FPS = 60
-BG_COLOR = (20, 20, 20)
-
-PADDLE_WIDTH = 120
-PADDLE_HEIGHT = 16
-PADDLE_SPEED = 7
-
-BALL_SIZE = 12
-BALL_SPEED_X = 4
-BALL_SPEED_Y = -4
-
-ball_vel = [BALL_SPEED_X, BALL_SPEED_Y]
+import random
+import paddle as pd
+from settings import * 
+import ball as bl
+import brick as br
 
 pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+paddle = pygame.Rect(WIDTH// 2- PADDLE_WIDTH//2, HEIGHT-4*PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT)
+ball = pygame.Rect(WIDTH//2, HEIGHT//2, BALL_DIAMETER, BALL_DIAMETER )
+bricks = br.create_bricks()
+font = pygame.font.Font(None, 36)
 
-y_pos = HEIGHT - PADDLE_HEIGHT - 20
-paddle = pygame.Rect(
-    WIDTH // 2 - PADDLE_WIDTH // 2, #x
-    y_pos,                          #y
-    PADDLE_WIDTH,
-    PADDLE_HEIGHT
-)
+powerup = None  # single power-up [rect, type] or None
+powerup_end_time = 0
+powerup_original_width = None
+POWERUP_COLOR = (200, 200, 0)
 
-ball = pygame.Rect(
-        WIDTH // 2 - BALL_SIZE // 2,
-        HEIGHT // 2,
-        BALL_SIZE,
-        BALL_SIZE
-    )
 running = True
 while running:
     clock.tick(FPS)
-
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE and game_over:
+                bricks = br.create_bricks()
+                lives = LIVES
+                game_over = False
+                paddle.x = WIDTH// 2- PADDLE_WIDTH//2
+                paddle.y = HEIGHT-4*PADDLE_HEIGHT
+                ball.x = WIDTH//2
+                ball.y = HEIGHT//2
+                speed[0] = BALL_SPEED
+                speed[1] = -BALL_SPEED
 
-    keys = pygame.key.get_pressed()
+    if not game_over:
+        paddle = pd.move_paddle(paddle,PADDLE_SPEED)
+        ball = bl.move_ball(ball, paddle)
+        if ball.y > HEIGHT:
+            lives -= 1
+            if lives <= 0:
+                game_over = True
+                speed[0] = 0
+                speed[1] = 0
+            else:
+                paddle.width = PADDLE_WIDTH
+                powerup = None
+                powerup_end_time = 0
+                powerup_original_width = None
+                paddle.x = WIDTH// 2- PADDLE_WIDTH//2
+                paddle.y = HEIGHT-4*PADDLE_HEIGHT
+                ball.x = WIDTH//2
+                ball.y = HEIGHT//2
+                speed[0] = BALL_SPEED
+                speed[1] = -BALL_SPEED
 
-    if keys[pygame.K_LEFT]:
-        paddle.x -= PADDLE_SPEED
-    if keys[pygame.K_RIGHT]:
-        paddle.x += PADDLE_SPEED
+        if powerup is not None:
+            powerup[0].y += POWERUP_FALL_SPEED
+            if powerup[0].colliderect(paddle):
+                powerup_original_width = paddle.width
+                if powerup[1] == "grow":
+                    new_w = int(paddle.width * PADDLE_GROW)
+                    new_w = min(WIDTH, new_w)
+                else:
+                    new_w = int(paddle.width * PADDLE_SHRINK)
+                    new_w = max(MIN_PADDLE_WIDTH, new_w)
+                cx = paddle.centerx
+                paddle.width = new_w
+                paddle.x = max(0, min(WIDTH - paddle.width, cx - paddle.width // 2))
+                powerup_end_time = pygame.time.get_ticks() + POWERUP_DURATION_MS
+                powerup = None
+            elif powerup[0].y > HEIGHT:
+                powerup = None
 
-    if paddle.left < 0:
-        paddle.left = 0
-    if paddle.right > WIDTH:
-        paddle.right = WIDTH
-
-
-    ball.x += ball_vel[0]
-    ball.y += ball_vel[1]
-    if ball.left <= 0 or ball.right >= WIDTH:
-        ball_vel[0] *= -1
-    if ball.top <= 0:
-        ball_vel[1] *= -1
-    
-    collision_ball = ball.inflate(-20, -20)
-
-    if collision_ball.colliderect(paddle):
-        if ball_vel[1] > 0:
-            ball.bottom = paddle.top
-            ball_vel[1] *= -1
-
+        if powerup_end_time and pygame.time.get_ticks() >= powerup_end_time:
+            if powerup_original_width is not None:
+                paddle.width = powerup_original_width
+                paddle.x = max(0, min(WIDTH - paddle.width, paddle.x))
+            powerup_end_time = 0
+            powerup_original_width = None
     screen.fill(BG_COLOR)
-    pygame.draw.rect(screen, (220, 220, 220), paddle)
-    pygame.draw.ellipse(screen, (0, 200, 255), ball)
+    
+    removed = br.handle_ball_collision(ball, bricks, speed)
+    if removed is not None:
+        if random.random() < POWERUP_CHANCE and powerup is None:
+            pu_type = random.choice(["grow", "shrink"])
+            r = removed["rect"]
+            pu_rect = pygame.Rect(r.centerx - POWERUP_SIZE//2, r.centery - POWERUP_SIZE//2, POWERUP_SIZE, POWERUP_SIZE)
+            powerup = [pu_rect, pu_type]
+    for brick in bricks:
+        pygame.draw.rect(
+        screen,
+        brick["color"],
+        brick["rect"],
+        border_radius=10)
+
+    if powerup is not None:
+        pygame.draw.rect(screen, POWERUP_COLOR, powerup[0])    
+    
+    pygame.draw.rect(screen, WHITE, paddle)
+    pygame.draw.ellipse(screen, WHITE, ball)
+
+    lives_surf = font.render(f'Lives: {lives}', True, WHITE)
+    screen.blit(lives_surf, (10, 10))
+
+    if game_over:
+        go_font = pygame.font.Font(None, 48)
+        go_surf = go_font.render('GAME OVER - Press SPACE to restart', True, WHITE)
+        go_rect = go_surf.get_rect(center=(WIDTH//2, HEIGHT//2))
+        screen.blit(go_surf, go_rect)
     pygame.display.flip()
 
 pygame.quit()
 sys.exit()
+
+
+
+
+     
