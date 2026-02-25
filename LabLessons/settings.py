@@ -11,4 +11,15 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 LIVES = 3
 game_over = False
-
+# powerup settings
+POWERUP_CHANCE = 1
+POWERUP_RADIUS = 10
+POWERUP_SPEED = 3
+POWERUP_DURATION = 5000  # ms
+POWERUP_MULT_GROW = 1.5
+POWERUP_MULT_SHRINK = 0.5
+powerups = []
+active_powerups = []
+active_powerup_end = 0
+active_effect = None
+orig_paddle_width = PADDLE_WIDTH
