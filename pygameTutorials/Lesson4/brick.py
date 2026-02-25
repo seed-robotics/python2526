@@ -7,7 +7,9 @@ ROW_COLORS = [(153,67,67),
               (230,142,70)
               ]
 
-def create_bricks(rows=5, brick_h=30, margin=5,top_offset=40):
+
+
+def create_bricks(rows=6, brick_h=30, margin=5,top_offset=40):
     bricks = []
     cols = WIDTH // (80 + margin)
     total_margin = margin * (cols + 1)
@@ -24,13 +26,3 @@ def create_bricks(rows=5, brick_h=30, margin=5,top_offset=40):
             }
             bricks.append(brick)
     return bricks
-
-
-def handle_ball_collision(ball, bricks, speed):
-
-    for brick in bricks[:]:
-        if ball.colliderect(brick["rect"]):
-            bricks.remove(brick)
-            speed[1] *= -1
-            return brick
-    return None

@@ -7,15 +7,19 @@ PADDLE_SPEED = 10
 FPS = 60
 BG_COLOR = (24,135,50)
 WHITE = (255, 255, 255)
-
-POWERUP_CHANCE = 0.35
-POWERUP_FALL_SPEED = 4
-POWERUP_SIZE = 20
-PADDLE_GROW = 1.5
-PADDLE_SHRINK = 0.6
-MIN_PADDLE_WIDTH = 40
-POWERUP_DURATION_MS = 5000
-
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
 LIVES = 3
-lives = LIVES
 game_over = False
+# powerup settings
+POWERUP_CHANCE = 1
+POWERUP_RADIUS = 10
+POWERUP_SPEED = 3
+POWERUP_DURATION = 5000  # ms
+POWERUP_MULT_GROW = 1.5
+POWERUP_MULT_SHRINK = 0.5
+powerups = []
+active_powerups = []
+active_powerup_end = 0
+active_effect = None
+orig_paddle_width = PADDLE_WIDTH

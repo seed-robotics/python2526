@@ -8,6 +8,11 @@ import brick as br
 import heart
 import random
 
+# powerup tuning: grow stacks; shrink is rarer and much stronger (overrides grows)
+GROW_WEIGHT = 0.85
+SHRINK_WEIGHT = 0.15
+SHRINK_MULT_OVERRIDE = 0.15
+
 pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -57,10 +62,11 @@ while running:
             collided = True
             if random.random() < POWERUP_CHANCE:
                 cx, cy = brick["rect"].center
+                pu_type = random.choices(["grow", "shrink"], weights=[GROW_WEIGHT, SHRINK_WEIGHT], k=1)[0]
                 powerups.append({
                     "x": cx,
                     "y": cy,
-                    "type": random.choice(["grow", "shrink"]) 
+                    "type": pu_type
                 })
     if collided:
         speed[1] *= -1
@@ -91,9 +97,10 @@ while running:
             now = pygame.time.get_ticks()
             if pu["type"] == "grow":
                 mult = POWERUP_MULT_GROW
+                active_powerups.append({"mult": mult, "end": now + POWERUP_DURATION})
             else:
-                mult = POWERUP_MULT_SHRINK
-            active_powerups.append({"mult": mult, "end": now + POWERUP_DURATION})
+                mult = SHRINK_MULT_OVERRIDE
+                active_powerups[:] = [{"mult": mult, "end": now + POWERUP_DURATION}]
             powerups.remove(pu)
         elif pu["y"] - POWERUP_RADIUS > HEIGHT:
             powerups.remove(pu)
