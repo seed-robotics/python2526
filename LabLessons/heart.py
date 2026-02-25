@@ -1,69 +1,32 @@
 import pygame
-import sys
-from pygame.locals import *
+import math
+from settings import RED
 
-# COLORS
-WINDOWWIDTH = 600
-WINDOWHEIGHT = 400
-RED = (255, 0, 0)
-BLACK = (0, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
-
-PINK1 = (255, 192, 203)
-PINK2 = (255, 105, 180)
-PINK3 = (255, 20, 147)
-PINK4 = (252, 90, 141)
-PINK5 = (209, 0, 86)
-
-
-def heart_icon(screen):
-    DISPLAYSURF = screen 
-    pygame.mixer.music.load("./randomCoolStuff/mp3.mp3")
-    pygame.mixer.music.play(loops=0, start=0.0)
-
-
-
-    pygame.draw.rect(DISPLAYSURF, PINK4, (280, 100, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK5, (280, 130, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK4, (280, 160, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK3, (280, 190, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK2, (280, 220, 30, 30))
-
-    pygame.draw.rect(DISPLAYSURF, PINK2, (310, 100, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK1, (340, 100, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK5, (370, 100, 30, 30))
-
-    pygame.draw.rect(DISPLAYSURF, PINK2, (250, 100, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK2, (220, 100, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK4, (190, 100, 30, 30))
-
-    pygame.draw.rect(DISPLAYSURF, PINK4, (310, 70, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK3, (340, 70, 30, 30))
-
-    pygame.draw.rect(DISPLAYSURF, PINK4, (250, 70, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK5, (220, 70, 30, 30))
-
-    ###########
-    pygame.draw.rect(DISPLAYSURF, PINK4, (310, 130, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK3, (340, 130, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK5, (370, 130, 30, 30))
-
-    pygame.draw.rect(DISPLAYSURF, PINK4, (250, 130, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK4, (220, 130, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK3, (190, 130, 30, 30))
-
-    ######
-    pygame.draw.rect(DISPLAYSURF, PINK3, (250, 160, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK5, (220, 160, 30, 30))
-
-    pygame.draw.rect(DISPLAYSURF, PINK3, (310, 160, 30, 30))
-    pygame.draw.rect(DISPLAYSURF, PINK4, (340, 160, 30, 30))
-
-    #
-    pygame.draw.rect(DISPLAYSURF, PINK4, (250, 190, 30, 30))
-
-    pygame.draw.rect(DISPLAYSURF, PINK4, (310, 190, 30, 30))
-
-    pygame.display.update()
+def draw_heart_parabolic(surface, x, y, size, color=RED, samples=64):
+    cx = x + size / 2
+    cy = y + size / 2
+    base_scale = size / 34.0
+    pts = []
+    for i in range(samples):
+        t = (i / samples) * 2 * math.pi
+        tx = 16 * math.sin(t) ** 3
+        ty = 13 * math.cos(t) - 5 * math.cos(2 * t) - 2 * math.cos(3 * t) - math.cos(4 * t)
+        px = cx + tx * base_scale
+        py = cy - ty * base_scale
+        pts.append((int(px), int(py)))
+    pygame.draw.polygon(surface, color, pts)
+    outline_color = (max(0, color[0] - 60), max(0, color[1] - 60), max(0, color[2] - 60))
+    pygame.draw.aalines(surface, outline_color, True, pts)
     
+def draw_heart(surface, x, y, size, color=RED):
+    radius = size // 4
+    left_center = (x + radius, y + radius)
+    right_center = (x + radius*3, y + radius)
+    pygame.draw.circle(surface, color, left_center, radius)
+    pygame.draw.circle(surface, color, right_center, radius)
+    points = [
+        (x, y + radius),
+        (x + size, y + radius),
+        (x + size//2, y + size)
+    ]
+    pygame.draw.polygon(surface, color, points)
