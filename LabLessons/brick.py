@@ -9,7 +9,7 @@ ROW_COLORS = [(153,67,67),
 
 
 
-def create_bricks(rows=6, brick_h=30, margin=5,top_offset=40):
+def create_bricks(rows=5, brick_h=30, margin=5,top_offset=40):
     bricks = []
     cols = WIDTH // (80 + margin)
     total_margin = margin * (cols + 1)

@@ -1,4 +1,4 @@
-WIDTH, HEIGHT = 800, 800
+WIDTH, HEIGHT = 800, 1000
 PADDLE_WIDTH, PADDLE_HEIGHT = 100, 10
 BALL_DIAMETER = 10
 BALL_SPEED = 6
@@ -8,18 +8,4 @@ FPS = 60
 BG_COLOR = (24,135,50)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-LIVES = 3
-game_over = False
-# powerup settings
-POWERUP_CHANCE = 1
-POWERUP_RADIUS = 10
-POWERUP_SPEED = 3
-POWERUP_DURATION = 5000  # ms
-POWERUP_MULT_GROW = 1.5
-POWERUP_MULT_SHRINK = 0.5
-powerups = []
-active_powerups = []
-active_powerup_end = 0
-active_effect = None
-orig_paddle_width = PADDLE_WIDTH
+flag = True
