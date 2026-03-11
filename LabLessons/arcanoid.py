@@ -5,8 +5,11 @@ from settings import *
 import ball as bl
 import brick as br
 import heart as h
+import random
 
 pygame.init()
+pwrUPchance = 0
+flag = False
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 paddle = pygame.Rect(WIDTH// 2- PADDLE_WIDTH//2, HEIGHT-4*PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT)
@@ -18,7 +21,8 @@ text_restart = font.render("Press Space to Restart", True, (255, 0, 0))
 rect_over = text_over.get_rect(center=(WIDTH//2, HEIGHT//2))
 rect_restart = text_restart.get_rect(center = (WIDTH//2, HEIGHT//2+75))
 bricks = br.create_bricks()
-
+#pygame.mixer.music.load("../randomCoolStuff/mp3.mp3")
+#pygame.mixer.music.play(loops=0, start=0.0)
 running = True
 while running:
     clock.tick(FPS)
@@ -37,6 +41,7 @@ while running:
         if ball.colliderect(brick["rect"]):
             bricks.remove(brick)
             speed[1] *= -1
+            pwrUPchance = random.randint(1,1)
     paddle = pd.move_paddle(paddle,PADDLE_SPEED)
     ball = bl.move_ball(ball, paddle)  
     screen.fill(BG_COLOR)
@@ -46,7 +51,21 @@ while running:
         brick["color"],
         brick["rect"],
         border_radius=10)
+
     
+
+    if pwrUPchance == 1 and DoIHavePowerUp == 0 :
+        #flag = True
+        paddleChance = random.randint(1,10)
+        time_now = pygame.time.get_ticks()
+        if paddleChance == 1:
+            paddle.width = PADDLE_WIDTH * 1/5
+        else:
+            paddle.width = PADDLE_WIDTH * 2
+        DoIHavePowerUp = 1
+
+    if pygame.time.get_ticks() > time_now + 5000:
+        DoIHavePowerUp = 0
 
     if not game_over:
         if ball.y >= HEIGHT:
