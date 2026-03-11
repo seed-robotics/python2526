@@ -8,7 +8,6 @@ import brick as br
 import heart
 import random
 
-# powerup tuning: grow stacks; shrink is rarer and much stronger (overrides grows)
 GROW_WEIGHT = 0.85
 SHRINK_WEIGHT = 0.15
 SHRINK_MULT_OVERRIDE = 0.15
@@ -38,6 +37,7 @@ while running:
                 speed[0] = BALL_SPEED
                 speed[1] = -abs(BALL_SPEED)
                 game_over = False
+                win = False
     paddle = pd.move_paddle(paddle,PADDLE_SPEED)
     ball = bl.move_ball(ball, paddle)  
     screen.fill(BG_COLOR)
@@ -58,22 +58,34 @@ while running:
     collided = False
     for brick in bricks[:]:
         if ball.colliderect(brick["rect"]):
-            bricks.remove(brick)
-            collided = True
-            if random.random() < POWERUP_CHANCE:
-                cx, cy = brick["rect"].center
-                pu_type = random.choices(["grow", "shrink"], weights=[GROW_WEIGHT, SHRINK_WEIGHT], k=1)[0]
-                powerups.append({
-                    "x": cx,
-                    "y": cy,
-                    "type": pu_type
-                })
+            if not brick.get("steel", False):  # Only remove non-steel bricks
+                bricks.remove(brick)
+                collided = True
+                if random.random() < POWERUP_CHANCE:
+                    cx, cy = brick["rect"].center
+                    pu_type = random.choices(["grow", "shrink"], weights=[GROW_WEIGHT, SHRINK_WEIGHT], k=1)[0]
+                    powerups.append({
+                        "x": cx,
+                        "y": cy,
+                        "type": pu_type
+                    })
+            else:
+                collided = True  # Steel bricks still bounce the ball
     if collided:
         speed[1] *= -1
 
+    # Check for win condition - only count non-steel bricks
+    regular_bricks = [b for b in bricks if not b.get("steel", False)]
+    if not regular_bricks:
+        game_over = True
+        win = True
+
     if game_over:
         screen.fill(BLACK)
-        msg_surf = font.render("Game Over - Press Space to play again", True, WHITE)
+        if win:
+            msg_surf = font.render("You Win! Press Space to play again", True, WHITE)
+        else:
+            msg_surf = font.render("Game Over - Press Space to play again", True, WHITE)
         msg_rect = msg_surf.get_rect(center=(WIDTH//2, HEIGHT//2))
         screen.blit(msg_surf, msg_rect)
     else:
