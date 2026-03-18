@@ -6,14 +6,17 @@ import ball as bl
 import brick as br
 import heart as h
 import random
+import p_up as p
 
 pygame.init()
 pwrUPchance = 0
+DoIHavePowerUp = 0
 flag = False
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 paddle = pygame.Rect(WIDTH// 2- PADDLE_WIDTH//2, HEIGHT-4*PADDLE_HEIGHT, PADDLE_WIDTH, PADDLE_HEIGHT)
 ball = pygame.Rect(WIDTH//2, HEIGHT//2, BALL_DIAMETER, BALL_DIAMETER )
+p_up = pygame.Rect(WIDTH//2, HEIGHT//2, BALL_DIAMETER, BALL_DIAMETER)
 font_big = pygame.font.Font(None, 74)
 font = pygame.font.Font(None, 40)
 text_over = font_big.render("GAME OVER", True, (255, 255, 0))
@@ -21,6 +24,7 @@ text_restart = font.render("Press Space to Restart", True, (255, 0, 0))
 rect_over = text_over.get_rect(center=(WIDTH//2, HEIGHT//2))
 rect_restart = text_restart.get_rect(center = (WIDTH//2, HEIGHT//2+75))
 bricks = br.create_bricks()
+time_now = 0 
 #pygame.mixer.music.load("../randomCoolStuff/mp3.mp3")
 #pygame.mixer.music.play(loops=0, start=0.0)
 running = True
@@ -39,11 +43,15 @@ while running:
 
     for brick in bricks:
         if ball.colliderect(brick["rect"]):
+            p_up.x, p_up.y = brick["rect"].center
             bricks.remove(brick)
             speed[1] *= -1
             pwrUPchance = random.randint(1,1)
+
     paddle = pd.move_paddle(paddle,PADDLE_SPEED)
     ball = bl.move_ball(ball, paddle)  
+    p_up, flag = p.move_p_up(p_up, paddle, flag)
+    
     screen.fill(BG_COLOR)
     for brick in bricks:
         pygame.draw.rect(
@@ -55,13 +63,15 @@ while running:
     
 
     if pwrUPchance == 1 and DoIHavePowerUp == 0 :
-        #flag = True
+        flag = True
         paddleChance = random.randint(1,10)
         time_now = pygame.time.get_ticks()
-        if paddleChance == 1:
-            paddle.width = PADDLE_WIDTH * 1/5
-        else:
-            paddle.width = PADDLE_WIDTH * 2
+        if p_up.colliderect(paddle):
+            if paddleChance == 1:
+                paddle.width = PADDLE_WIDTH * 1/5
+            else:
+                paddle.width = PADDLE_WIDTH * 2
+            print(paddle.width)
         DoIHavePowerUp = 1
 
     if pygame.time.get_ticks() > time_now + 5000:
@@ -95,6 +105,8 @@ while running:
             h.draw_heart_parabolic(screen, hx, start_y, heart_size)
         pygame.draw.rect(screen, WHITE, paddle)
         pygame.draw.ellipse(screen, WHITE, ball)
+        if flag:
+            pygame.draw.ellipse(screen, WHITE, p_up)
     pygame.display.flip()
 
 pygame.quit()
