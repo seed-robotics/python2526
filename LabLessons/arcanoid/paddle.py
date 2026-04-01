@@ -7,8 +7,8 @@ def move_paddle(paddle,PADDLE_SPEED = 10):
         paddle.x -= PADDLE_SPEED
     if keys[pygame.K_RIGHT]:
         paddle.x += PADDLE_SPEED
-    if paddle.x >  WIDTH - PADDLE_WIDTH:
-        paddle.x = WIDTH - PADDLE_WIDTH
+    if paddle.x >  WIDTH - paddle.width:
+        paddle.x = WIDTH - paddle.width
     if paddle.x < 0:
         paddle.x = 0 
     return paddle
