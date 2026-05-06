@@ -26,6 +26,10 @@ texture = ExtResource("1_80nbo")
 z_index = 1
 position = Vector2(24, 36)
 
+[node name="Camera2D" type="Camera2D" parent="player" unique_id=363695052]
+zoom = Vector2(3, 3)
+rotation_smoothing_enabled = true
+
 [node name="Node2D" parent="." unique_id=277133312 instance=ExtResource("3_feb5d")]
 position = Vector2(24, 36)
 
