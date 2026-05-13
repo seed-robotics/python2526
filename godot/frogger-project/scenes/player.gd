@@ -17,7 +17,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 	if Input.is_action_just_released("space"):
-		print("to binteo einai 2.55.10")   
+		print("to binteo einai 3:23")   
 func animation():
 	if direction:
 		if direction.x != 0 and direction.y == 0: 
@@ -32,3 +32,9 @@ func animation():
 			$AnimatedSprite2D.flip_h = direction.x > 0
 	else:
 		$AnimatedSprite2D.frame = 0
+
+	 # Replace with function body.
+
+
+func _on_area_2d_body_entered(_body: Node2D) -> void:
+	print('victory') 
