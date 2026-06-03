@@ -13,6 +13,7 @@ config_version=5
 config/name="frogger project"
 run/main_scene="uid://mkougmwgah07"
 config/features=PackedStringArray("4.6", "Forward Plus")
+run/max_fps=60
 config/icon="res://icon.svg"
 
 [display]
@@ -51,6 +52,17 @@ space={
 ]
 }
 
+[layer_names]
+
+2d_render/layer_1="terrain"
+2d_render/layer_2="player"
+2d_render/layer_3="cars"
+2d_render/layer_4="walls"
+2d_physics/layer_1="terrain"
+2d_physics/layer_2="player"
+2d_physics/layer_3="car"
+2d_physics/layer_4="walls"
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
@@ -59,3 +71,4 @@ space={
 
 textures/canvas_textures/default_texture_filter=0
 rendering_device/driver.windows="d3d12"
+textures/vram_compression/import_etc2_astc=true

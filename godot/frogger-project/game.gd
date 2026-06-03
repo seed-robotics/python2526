@@ -12,5 +12,12 @@ func _process(delta: float) -> void:
 
 
 func _on_car_timer_timeout() -> void:
-	var car = car_scene.instantiate()
+	var car = car_scene.instantiate() as Area2D
+	var pos_marker = $CarStartPositions.get_children().pick_random() as Marker2D
+	car.position = pos_marker.position
 	$Oblects.add_child(car)
+	car.connect("body_entered", _go_to_title)
+
+func _go_to_title(_test):
+	print('player lost')
+	

@@ -39,6 +39,8 @@ texture = ExtResource("1_80nbo")
 
 [node name="borders" type="StaticBody2D" parent="." unique_id=939675704]
 position = Vector2(7, -214)
+collision_layer = 8
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="borders" unique_id=1103486645]
 position = Vector2(-208, 220)
@@ -54,9 +56,12 @@ shape = SubResource("RectangleShape2D_ryrav")
 
 [node name="area2d" parent="borders" unique_id=784912754 instance=ExtResource("5_7jktm")]
 position = Vector2(12, -117)
+collision_layer = 9
+collision_mask = 2
 
 [node name="Area2D" type="Area2D" parent="borders" unique_id=483787711]
 position = Vector2(-7, 214)
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="borders/Area2D" unique_id=1986608927]
 position = Vector2(3.5, -140)
@@ -65,6 +70,7 @@ shape = SubResource("RectangleShape2D_eow3j")
 [node name="Timer" type="Node" parent="." unique_id=1336232930]
 
 [node name="Car Timer" type="Timer" parent="Timer" unique_id=890184991]
+wait_time = 0.08
 autostart = true
 
 [node name="Oblects" type="Node2D" parent="." unique_id=405766153]
@@ -105,6 +111,35 @@ texture = ExtResource("7_vef74")
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Oblects/Background" unique_id=596004945]
 position = Vector2(-73, 179.5)
 shape = SubResource("RectangleShape2D_iotsf")
+
+[node name="CarStartPositions" type="Node2D" parent="." unique_id=731578398]
+
+[node name="Marker2D" type="Marker2D" parent="CarStartPositions" unique_id=262502657]
+position = Vector2(203, 2)
+
+[node name="Marker2D11" type="Marker2D" parent="CarStartPositions" unique_id=2146331346]
+position = Vector2(207, 164)
+
+[node name="Marker2D12" type="Marker2D" parent="CarStartPositions" unique_id=1788903771]
+position = Vector2(-204, 136)
+
+[node name="Marker2D13" type="Marker2D" parent="CarStartPositions" unique_id=1130785733]
+position = Vector2(205, 113)
+
+[node name="Marker2D14" type="Marker2D" parent="CarStartPositions" unique_id=1732566257]
+position = Vector2(-201, 92)
+
+[node name="Marker2D2" type="Marker2D" parent="CarStartPositions" unique_id=1953849548]
+position = Vector2(-201, -26)
+
+[node name="Marker2D3" type="Marker2D" parent="CarStartPositions" unique_id=1988735493]
+position = Vector2(204, -58)
+
+[node name="Marker2D4" type="Marker2D" parent="CarStartPositions" unique_id=159466616]
+position = Vector2(-202, -90)
+
+[node name="Marker2D5" type="Marker2D" parent="CarStartPositions" unique_id=1827358944]
+position = Vector2(208, -115)
 
 [connection signal="area_entered" from="borders/Area2D" to="Oblects/player" method="_on_area_2d_area_entered"]
 [connection signal="body_entered" from="borders/Area2D" to="Oblects/player" method="_on_area_2d_body_entered"]
