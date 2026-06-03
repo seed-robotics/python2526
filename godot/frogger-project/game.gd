@@ -20,4 +20,15 @@ func _on_car_timer_timeout() -> void:
 
 func _go_to_title(_test):
 	print('player lost')
-	
+
+
+func _on_timer_timeout() -> void:
+	pass # Replace with function body.
+
+
+func _on_area_2d_body_entered(_body: Node2D) -> void:
+	call_deferred("scene_change")
+
+
+func scene_change():
+	get_tree().change_scene_to_file("res://scenes/title.tscn")

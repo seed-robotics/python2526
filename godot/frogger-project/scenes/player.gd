@@ -34,7 +34,3 @@ func animation():
 		$AnimatedSprite2D.frame = 0
 
 	 # Replace with function body.
-
-
-func _on_area_2d_body_entered(_body: Node2D) -> void:
-	print('victory') 
