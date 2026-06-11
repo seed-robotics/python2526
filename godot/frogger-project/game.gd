@@ -1,15 +1,13 @@
 extends Node2D
+var score: int
 
 var car_scene: PackedScene = preload('res://scenes/car.tscn')
-# Called when the node enters the scene tree for the first time.
+
 func _ready() -> void:
 	pass # Replace with function body.
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-
 
 func _on_car_timer_timeout() -> void:
 	var car = car_scene.instantiate() as Area2D
@@ -19,16 +17,16 @@ func _on_car_timer_timeout() -> void:
 	car.connect("body_entered", _go_to_title)
 
 func _go_to_title(_test):
-	print('player lost')
-
+	call_deferred("scene_change")
 
 func _on_timer_timeout() -> void:
-	pass # Replace with function body.
-
+	score += 1
+	$CanvasLayer/Label.text = str(score)
 
 func _on_area_2d_body_entered(_body: Node2D) -> void:
 	call_deferred("scene_change")
-
+	if score < Global.score:
+		Global.score = score
 
 func scene_change():
 	get_tree().change_scene_to_file("res://scenes/title.tscn")

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://nq7tv7bl0vmr"]
 
 [ext_resource type="FontFile" uid="uid://dr201ov4c76pb" path="res://fonts/Crackman.otf" id="1_4ignj"]
+[ext_resource type="Script" uid="uid://hw7p5yavbi6n" path="res://scenes/title.gd" id="1_b3w7a"]
 [ext_resource type="Texture2D" uid="uid://bkgrir378horu" path="res://graphics/player/player_simple.png" id="2_p6dhs"]
 [ext_resource type="Texture2D" uid="uid://ded8huv3lr1a7" path="res://graphics/cars/yellow.png" id="3_pyl7j"]
 [ext_resource type="FontFile" uid="uid://hqpa84d2dqvp" path="res://fonts/Better VCR 9.0.1.ttf" id="4_pyl7j"]
@@ -12,6 +13,7 @@ anchor_bottom = 0.178
 offset_bottom = 532.656
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_b3w7a")
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=897035072]
 layout_mode = 1
@@ -19,6 +21,23 @@ anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color(0.69411767, 0.28627452, 0.4862745, 0.8392157)
+
+[node name="Label2" type="Label" parent="ColorRect" unique_id=574021804]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = 1809.0
+offset_right = 44.0
+offset_bottom = -1535.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_pyl7j")
+theme_override_font_sizes/font_size = 25
+text = "Highscore :"
 
 [node name="Label" type="Label" parent="." unique_id=647951899]
 layout_mode = 1
@@ -67,6 +86,23 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("3_pyl7j")
 
+[node name="Label3" type="Label" parent="." unique_id=160349934]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 158.0
+offset_top = 286.0
+offset_right = 627.0
+offset_bottom = 319.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_pyl7j")
+theme_override_font_sizes/font_size = 25
+text = "made by: peterox and tfue"
+
 [node name="Label2" type="Label" parent="." unique_id=1435758254]
 layout_mode = 1
 anchors_preset = -1
@@ -74,12 +110,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -44.0
-offset_top = 1809.0
-offset_right = 44.0
-offset_bottom = -1535.0
+offset_left = -110.0
+offset_top = 187.0
+offset_right = 116.0
+offset_bottom = 220.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("4_pyl7j")
 theme_override_font_sizes/font_size = 25
-text = "best score :"
+text = "Press Space to start again!"

@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://doghmovcgeltw" path="res://graphics/map.png" id="1_80nbo"]
 [ext_resource type="Script" uid="uid://bgck31qcta58j" path="res://game.gd" id="1_eow3j"]
 [ext_resource type="PackedScene" uid="uid://dk5uwi60o2dvn" path="res://scenes/player.tscn" id="2_e2o6t"]
+[ext_resource type="FontFile" uid="uid://dr201ov4c76pb" path="res://fonts/Crackman.otf" id="4_boyg6"]
 [ext_resource type="PackedScene" uid="uid://b6e26vcmi14dj" path="res://boundary2.tscn" id="5_7jktm"]
 [ext_resource type="Texture2D" uid="uid://d1h0ksxlju0ou" path="res://graphics/objects/house1.png" id="5_eow3j"]
 [ext_resource type="Texture2D" uid="uid://cuqeolw7yvunc" path="res://graphics/objects/box3.png" id="6_j5wjh"]
@@ -17,7 +18,6 @@
 [ext_resource type="Texture2D" uid="uid://cxutqp0hti8vw" path="res://graphics/objects/bench.png" id="15_7sc4i"]
 [ext_resource type="Texture2D" uid="uid://cfe22lwgaf1k2" path="res://graphics/objects/traffic.png" id="16_80cx4"]
 [ext_resource type="Texture2D" uid="uid://y78osdw0bolc" path="res://graphics/objects/box1.png" id="17_e8heu"]
-[ext_resource type="Script" uid="uid://dsyp88q7qtgei" path="res://label.gd" id="18_rvswv"]
 
 [sub_resource type="TileSet" id="TileSet_eow3j"]
 
@@ -32,6 +32,8 @@ size = Vector2(475, 28.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_eow3j"]
 size = Vector2(433, 20)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_e36ub"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hve3p"]
 size = Vector2(94.87059, 77.57576)
@@ -84,18 +86,32 @@ size = Vector2(33, 10)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5b14r"]
 size = Vector2(203, 12)
 
+[sub_resource type="GDScript" id="GDScript_rvswv"]
+script/source = "extends Label
+
+var score :int =0
+
+
+
+func _process(_delta: float) -> void:
+	pass
+"
+
 [node name="game" type="Node2D" unique_id=528734896]
 script = ExtResource("1_eow3j")
-metadata/_edit_vertical_guides_ = [-190.0]
-metadata/_edit_horizontal_guides_ = [-320.0]
+metadata/_edit_vertical_guides_ = [-190.0, -191.0]
+metadata/_edit_horizontal_guides_ = [-320.0, 87.0, 320.0]
 
 [node name="Map" type="Sprite2D" parent="." unique_id=541253687]
+position = Vector2(-1, -7)
 texture = ExtResource("1_80nbo")
+metadata/_edit_lock_ = true
 
 [node name="TileMapLayer" type="TileMapLayer" parent="Map" unique_id=603657427]
 tile_set = SubResource("TileSet_eow3j")
 
 [node name="TileMap" type="TileMap" parent="Map" unique_id=1263522875]
+visible = false
 format = 2
 
 [node name="borders" type="StaticBody2D" parent="." unique_id=939675704]
@@ -125,8 +141,23 @@ position = Vector2(-7, 214)
 collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="borders/Area2D" unique_id=1986608927]
-position = Vector2(3.5, -140)
+position = Vector2(15, -222)
 shape = SubResource("RectangleShape2D_eow3j")
+
+[node name="Label" type="Label" parent="borders/Area2D/CollisionShape2D" unique_id=985663568]
+material = SubResource("CanvasItemMaterial_e36ub")
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -40.0
+offset_top = -11.0
+offset_right = 43.0
+offset_bottom = 12.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.32941177, 0.3529412, 0.43137255, 1)
+theme_override_fonts/font = ExtResource("4_boyg6")
+theme_override_font_sizes/font_size = 23
+text = "Finish Line"
 
 [node name="Timer" type="Node" parent="." unique_id=1336232930]
 
@@ -138,10 +169,16 @@ autostart = true
 
 [node name="player" parent="Oblects" unique_id=1456491617 instance=ExtResource("2_e2o6t")]
 z_index = 1
-position = Vector2(24, 36)
+position = Vector2(-105, 262)
 
 [node name="Camera2D" type="Camera2D" parent="Oblects/player" unique_id=363695052]
+position = Vector2(-4, 12)
 zoom = Vector2(3, 3)
+limit_left = -190
+limit_top = -320
+limit_right = 190
+limit_bottom = 320
+position_smoothing_enabled = true
 rotation_smoothing_enabled = true
 
 [node name="Background" type="StaticBody2D" parent="Oblects" unique_id=1635966826]
@@ -196,7 +233,7 @@ position = Vector2(-15, 19)
 texture = ExtResource("10_7sc4i")
 
 [node name="CollisionShape2D6" type="CollisionShape2D" parent="Oblects/Background" unique_id=1583361301]
-position = Vector2(-15, 26.5)
+position = Vector2(-15, 22)
 shape = SubResource("RectangleShape2D_hb5m1")
 
 [node name="Sprite2D4" type="Sprite2D" parent="Oblects/Background" unique_id=595948929]
@@ -287,55 +324,56 @@ position = Vector2(-66.5, -73)
 shape = SubResource("RectangleShape2D_xa8c5")
 
 [node name="Sprite2D14" type="Sprite2D" parent="Oblects/Background" unique_id=1477752539]
-position = Vector2(104, -186)
+position = Vector2(106, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D15" type="Sprite2D" parent="Oblects/Background" unique_id=1463146272]
-position = Vector2(83, -186)
+position = Vector2(85, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D16" type="Sprite2D" parent="Oblects/Background" unique_id=185896620]
-position = Vector2(62, -186)
+position = Vector2(64, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D17" type="Sprite2D" parent="Oblects/Background" unique_id=1670310811]
-position = Vector2(43, -186)
+position = Vector2(45, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D18" type="Sprite2D" parent="Oblects/Background" unique_id=1346568808]
-position = Vector2(25, -186)
+position = Vector2(27, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D19" type="Sprite2D" parent="Oblects/Background" unique_id=1319586956]
-position = Vector2(7, -186)
+position = Vector2(9, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D20" type="Sprite2D" parent="Oblects/Background" unique_id=1612811927]
-position = Vector2(-10, -186)
+position = Vector2(-8, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D21" type="Sprite2D" parent="Oblects/Background" unique_id=1616910753]
-position = Vector2(-28, -186)
+position = Vector2(-26, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D22" type="Sprite2D" parent="Oblects/Background" unique_id=664813255]
-position = Vector2(-46, -186)
+position = Vector2(-44, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D23" type="Sprite2D" parent="Oblects/Background" unique_id=794783178]
-position = Vector2(-64, -186)
+position = Vector2(-61.5, -158)
+scale = Vector2(1.0625, 1)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D24" type="Sprite2D" parent="Oblects/Background" unique_id=124784755]
-position = Vector2(-83, -186)
+position = Vector2(-81, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="Sprite2D25" type="Sprite2D" parent="Oblects/Background" unique_id=249419941]
-position = Vector2(-83, -186)
+position = Vector2(-81, -158)
 texture = ExtResource("8_lc2xo")
 
 [node name="CollisionShape2D17" type="CollisionShape2D" parent="Oblects/Background" unique_id=1577404375]
-position = Vector2(10.5, -186)
+position = Vector2(11, -158)
 shape = SubResource("RectangleShape2D_5b14r")
 
 [node name="CarStartPositions" type="Node2D" parent="." unique_id=731578398]
@@ -344,7 +382,7 @@ shape = SubResource("RectangleShape2D_5b14r")
 position = Vector2(203, 2)
 
 [node name="Marker2D11" type="Marker2D" parent="CarStartPositions" unique_id=2146331346]
-position = Vector2(207, 164)
+position = Vector2(204, 158)
 
 [node name="Marker2D12" type="Marker2D" parent="CarStartPositions" unique_id=1788903771]
 position = Vector2(-204, 136)
@@ -378,14 +416,16 @@ offset_right = 51.5
 offset_bottom = 23.0
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 30
-text = "highcore :"
-script = ExtResource("18_rvswv")
+script = SubResource("GDScript_rvswv")
 metadata/_edit_use_anchors_ = true
 
 [node name="Timer" type="Timer" parent="CanvasLayer" unique_id=2095157534]
 autostart = true
 
+[node name="TouchScreenButton" type="TouchScreenButton" parent="." unique_id=1259267400]
+position = Vector2(151, 280)
+
 [connection signal="area_entered" from="borders/Area2D" to="Oblects/player" method="_on_area_2d_area_entered"]
 [connection signal="body_entered" from="borders/Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="timeout" from="Timer/Car Timer" to="." method="_on_car_timer_timeout"]
-[connection signal="timeout" from="CanvasLayer/Timer" to="CanvasLayer/Label" method="_on_timer_timeout"]
+[connection signal="timeout" from="CanvasLayer/Timer" to="." method="_on_timer_timeout"]
